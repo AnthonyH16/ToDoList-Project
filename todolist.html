@@ -1,23 +1,65 @@
 <!DOCTYPE html>
 <html lang="en-US">
-  <head>
-    <meta charset="utf-8"/>
+
+<head>
+    <meta charset="utf-8" />
     <title>To Do List</title>
     <style>
-     
+
     </style>
-    <!-- <link rel="stylesheet" href="../styles.css" /> -->
-  </head>
+    <link rel="stylesheet" href="todolist.css" />
+    <script src="todolist.js" defer></script>
+</head>
 
-  <body>
+<body>
+    <div class="mainContainer">
+        <div class="header">
+            <input type="image" src="sidebar.png" name="sidebarButton" class="sidebarButton" id="sidebarButton" />
 
-    
+            <div class="headerTitle">To Do List</div>
+        </div>
+        <div class="sidebar">
+            <!-- <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a> -->
+            <a href="#">All Tasks</a>
+            <a href="#">Today</a>
+            <a href="#">Seven Day View</a>
+            <a href="#">Completed Tasks</a>
+            <a href="#">Projects</a>
+        </div>
+        <div class="currentView">
+            <h2>All Tasks</h2>
+            <div class="newTask">+ New Task</div>
+        </div>
+        <ul id= "tasks">
 
-  </body>
-  <script>
-   
+        </ul>
+        <dialog>
+            <form id="newTaskForm" >
+                <button type='button' id="close">Close</button>
+                <label for="taskName"></label>
+                <input class="clear" type="text" name="tName" id="taskName" placeholder="Task Name" >
 
-   
-  </script>
+                <label for="description"></label>
+                <input class="clear" type="text" name="author" id="description" placeholder="description" >
+
+                <label for="date"></label>
+                <input class="clear" type="date" name="date" id="date" >
+                
+                <label for='priority'> </label>
+                <select name="priority" id="priority">
+                    <option value="">Priority</option>
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                    <option value="low">Low</option>                    
+                    
+                </select>
+                  
+                  <input type="submit" value="Submit" />
+            </form>
+        </dialog>
+    </div>
+
+
+</body>
 
 </html>
