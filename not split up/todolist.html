@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8" />
+    <title>To Do List</title>
+    <style>
+
+    </style>
+    <link rel="stylesheet" href="todolist.css" />
+    <script src="todolist.js" defer></script>
+</head>
+
+<body>
+    <div class="mainContainer">
+        <div class="header">
+            <input type="image" src="/home/bofadeeze/repos/ToDoList-Project/src/sidebar.png" name="sidebarButton"
+                class="sidebarButton" id="sidebarButton" />
+
+            <div class="headerTitle">To Do List:</div>
+        </div>
+        <div class="notHeader">
+            <div class="sidebar">
+                <!-- <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a> -->
+                <a class="allTasksButton" id="viewSelector" href="#">
+                    <input type="image" src="/home/bofadeeze/repos/ToDoList-Project/src/task-list.png" name="allImage"
+                        class="allImage" id="sidebarImages" />
+                    All Tasks</a>
+                <a class="todayButton" id="viewSelector" href="#">
+                    <input type="image" src="/home/bofadeeze/repos/ToDoList-Project/src/today.png" name="todayImage"
+                        class="todayImage" id="sidebarImages" />
+                    Today</a>
+                <a class="sevenDayButton" id="viewSelector" href="#">
+                    <input type="image" src="/home/bofadeeze/repos/ToDoList-Project/src/week.png" name="sevenImage"
+                        class="sevenImage" id="sidebarImages" />
+                    Seven Day View</a>
+                <a class="completedButton" id="viewSelector" href="#">
+                    <input type="image" src="/home/bofadeeze/repos/ToDoList-Project/src/completed.png"
+                        name="completedImage" class="completedImage" id="sidebarImages" />
+                    Completed Tasks</a>
+                <div class="projectsContainer">
+                    <div class='projectsHeader'>
+                        <a class="projectsButton" onclick="openModal('projectModal')" href="#">Projects</a>
+                        <input onclick="openModal('projectModal')" type="image"
+                            src="/home/bofadeeze/repos/ToDoList-Project/src/add.png" name="addProject"
+                            class="addProject" id="sidebarImages" />
+                    </div>
+                    <div class="projectsList">
+                        <select name="sidebarProjectDropdown" id="sidebarProjectDropdown">
+                            <option value="No Project">Select Project</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="newTask">New Task
+                    <input type="image" src="/home/bofadeeze/repos/ToDoList-Project/src/add.png" name="addTask"
+                        class="addTask" id="addTask" />
+                    
+                </div>
+            </div>
+
+            <div class="taskDisplay">
+                <div class="taskHeader">
+                    <div class="currentView">All Tasks</div>
+
+                </div>
+                <ul id="tasks">
+
+                </ul>
+                
+            </div>
+
+            <dialog class="newTaskDialog">
+                <form id="newTaskForm">
+                    <button type='button' id="close"><span class="buttonText">x</span></button>
+                    <div class="modalTopText">Add New Task</div>
+
+
+                    <label for="taskName"></label>
+                    <input class="clear" type="text" name="tName" id="taskName" placeholder="Task Name">
+
+                    <label for="description"></label>
+                    <input class="clear" type="text" name="description" id="description" placeholder="Description">
+
+                    <label for="date"></label>
+                    <input class="clear" type="date" name="date" id="date">
+
+<div class="drops">
+                    <label for='priority'> </label>
+                    <select name="priority" id="priority" class="dropdownSize">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+
+                    <select name="project" id="project" class="dropdownSize">
+                        <option value="">No Project</option>
+                    </select>
+                </div>
+
+                    <input class="submit" type="submit" value="Submit" />
+                </form>
+            </dialog>
+
+            <section class="modal hidden" id="projectModal">
+                <div class="modalHead">
+                    <div class="modalTopText">Add Project</div>
+                   <button onclick="closeModal('projectModal')" class="closeProjectForm" id="closeButton"> <span class="buttonText">x</span></button>
+                    
+                </div>
+                <input type="text" id="projectName" placeholder="Project Name">
+                <button class="modalAddProject"><span>Add Project</span>Add Project</button>
+            </section>
+
+            <section class="modal hidden" id="editModal">                
+                <div class="modalHead">
+                    <div class="modalTopText">Edit Task</div>
+                    <button onclick="closeModal('editModal')" class="closeEditModal" id="closeButton"><span class="buttonText">x</span></button>
+                    
+                </div>
+                <input type="text" id="taskTitle" placeholder="Title">
+                <input type="text" id="taskDesc" placeholder="Description">
+                <input type="date" id="taskDD" placeholder="">
+                <select name="priority" id="priority" class="dropdownSize">
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
+                <button class="modalEditButton"><span>Edit</span><span>Save Changes</span></button>
+            </section>
+
+            <div class="overlay hidden"></div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>

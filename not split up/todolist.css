@@ -1,0 +1,637 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: center; */
+    color: #222;
+    position: relative;
+    min-height: 100vh;
+}
+
+.mainContainer {
+    font-family: -apple-system, system-ui, sans-serif, monospace;
+    display: grid;
+    /* grid-template-columns: 250px auto; */
+    grid-template-rows: 100px 500px;
+    /* overflow: auto; */
+}
+
+.sidebar {
+    background-color: #111;
+    display: grid;
+    max-height: 450px;
+    width: 0px;
+    transition: 500ms ease-out;
+    margin-top: 25px;
+}
+
+#sidebarImages {
+    display: none;
+    height: 25px;
+    width: 25px;
+    margin-right: 10px;
+}
+
+.doneImage {
+    height: 25px;
+    width: 25px;
+}
+
+#viewSelector {
+    display: flex;
+    align-content: center;
+}
+
+.header {
+    display: grid;
+    grid-template-columns: 100px auto;
+    grid-column: 1 / -1;
+    grid-row: 1 / 2;
+}
+
+.sidebarButton {
+    /* max-width: 100%; */
+    height: auto;
+    width: 80px;
+    align-self: center;
+
+}
+
+a {
+    color: white;
+    text-decoration: none;
+    place-self: center;
+    padding: 5px;
+    border-radius: 5px;
+
+}
+
+.taskDisplay {
+    display: grid;
+    align-items: start;
+    grid-template-rows: 50px auto;
+    margin-left: -250px;
+    transition: 500ms ease-out;
+    margin-top: 25px;
+    overflow: auto;
+
+}
+
+.taskHeader {
+    grid-column: 1 / 2;
+    padding-left: 15px;
+}
+
+.currentView {
+    font-size: 25px;
+    padding-bottom: 10px;
+    font-weight: bold;
+}
+
+.headerTitle {
+    place-self: center;
+    font-size: 80px;
+}
+
+.taskInfo:hover {
+    cursor: pointer;
+
+}
+
+.taskTitle {
+    font-family: -apple-system, system-ui, sans-serif, monospace;
+    color: black;
+    letter-spacing: 0px;
+}
+
+.taskDesc {
+    color: #222;
+    font-size: 13px;
+}
+
+#taskDoneButton {
+    width: 15px;
+    height: 15px;
+    justify-self: center;
+    margin-top: 1rem;
+    margin-right: 6px;
+}
+
+#tasks {
+    display: grid;
+    margin: 0;
+
+}
+
+.taskDD {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 15px;
+}
+
+.taskDivider {
+    height: 1px;
+    color: orangered;
+    background-color: orangered;
+    width: 100%;
+    border: none;
+    opacity: .4;
+    /* margin: 0; */
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    display: grid;
+    grid-template-columns: 25px auto;
+}
+
+p {
+    margin: 3px;
+}
+
+.dateHeader {
+    font-weight: bold;
+}
+
+.completedTask {
+    display: flex;
+    align-items: center;
+}
+
+.prefix {
+    margin-left: 4px;
+}
+
+.suffix {
+    margin-left: 8px;
+    font-weight: bold;
+    opacity: .5;
+}
+
+.newTask {
+    display: none;
+    color: white;
+    justify-content: center;
+    place-self: center;
+    padding: 5px;
+    border-radius: 5px;
+    gap: 8px;
+}
+
+.addTask {
+    height: 25px;
+    width: 25px;
+    margin-right: 10px;
+}
+
+.newTask:hover,
+.allTasksButton:hover,
+.todayButton:hover,
+.sevenDayButton:hover,
+.completedButton:hover,
+.projectsHeader:hover {
+    background-color: rgb(131, 130, 130);
+    cursor: pointer;
+    transition: 800ms;
+
+}
+
+.high {
+    /* background-color: red;
+    opacity: .5; */
+
+    background-color: initial;
+    background-image: linear-gradient(-180deg, #fa1c1c8c, #df00008c);
+    border-radius: 6px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Inter, -apple-system, system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
+    height: 40px;
+    line-height: 40px;
+    outline: 0;
+    overflow: hidden;
+    pointer-events: auto;
+    position: relative;
+    text-align: center;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    vertical-align: top;
+    white-space: nowrap;
+    width: 10px;
+    /* z-index: 9; */
+    border: 0;
+    transition: box-shadow .2s;
+}
+
+.high:hover {
+    box-shadow: rgba(253, 0, 0, 0.5) 0 3px 8px;
+}
+
+.medium {
+    /* background-color: orange;
+    opacity: .5; */
+
+    background-color: initial;
+    background-image: linear-gradient(-180deg, #FF7E318c, #E62C038c);
+    border-radius: 6px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Inter, -apple-system, system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
+    height: 40px;
+    line-height: 40px;
+    outline: 0;
+    overflow: hidden;
+    pointer-events: auto;
+    position: relative;
+    text-align: center;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    vertical-align: top;
+    white-space: nowrap;
+    width: 10px;
+    /* z-index: 9; */
+    border: 0;
+    transition: box-shadow .2s;
+}
+
+.medium:hover {
+    box-shadow: rgba(253, 76, 0, 0.5) 0 3px 8px;
+}
+
+.low {
+    background-color: initial;
+    background-image: linear-gradient(-180deg, #3191ff8c, #1a03e68c);
+    border-radius: 6px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Inter, -apple-system, system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
+    height: 40px;
+    line-height: 40px;
+    outline: 0;
+    overflow: hidden;
+    pointer-events: auto;
+    position: relative;
+    text-align: center;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    vertical-align: top;
+    white-space: nowrap;
+    width: 10px;
+    /* z-index: 9; */
+    border: 0;
+    transition: box-shadow .2s;
+}
+
+.low:hover {
+    box-shadow: rgba(4, 0, 253, 0.5) 0 3px 8px;
+}
+
+.projContainer {
+    display: grid;
+    grid-template-columns: 5fr 1fr;
+
+}
+
+.addProject {
+    display: none;
+    height: 25px;
+    width: 25px;
+    place-self: center;
+    transition: .5s;
+}
+
+#newTaskForm{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* gap: 0.4rem; */
+    gap: 8px;
+    width: 275px;
+    padding: 1.3rem;
+    min-height: 250px;
+    /* position: absolute; */
+    /* top: 20%; */
+    background-color: white;
+    /* border: 1px solid #ddd; */
+}
+
+.submit{
+    margin-top: 8px;
+}
+#date{
+    width: 125px;
+    align-self: center;
+}
+
+.drops{
+    display: flex;
+    justify-content: center;
+    column-gap: 10px;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+    z-index: 1;
+}
+
+.modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.4rem;
+    width: 275px;
+    padding: 1.3rem;
+    min-height: 250px;
+    position: absolute;
+    top: 20%;
+    background-color: white;
+    border: 1px solid #ddd;
+    /* border-radius: 15px; */
+    z-index: 2;
+}
+
+.modalHead {
+    display: flex;
+    /* justify-content: space-between; */
+    /* padding-bottom: 25px; */
+    flex-flow: column-reverse;
+    margin-bottom: 24px;
+    row-gap: 24px;
+
+}
+
+.modalTopText{
+    font-size: larger;
+    font-weight: bold;
+
+}
+#taskTitle , #taskDesc{
+    width: 200px;
+    align-self: center;
+    margin-bottom: 10px;
+}
+#taskDD {
+    width: 125px;
+    align-self: center;
+    margin-bottom: 10px;
+}
+
+.dropdownSize{
+    width: 100px;
+    align-self: center;
+}
+/* input{
+    margin-bottom: 10px;
+} */
+
+/* begin */
+
+
+
+.modalEditButton {
+    /* width: 150px;
+    align-self: center;*/
+    margin-top: 16px; 
+
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #18181a;
+    color: #18181a;
+    display: inline-block;
+    font-size: 15px;
+    line-height: 15px;
+    padding: 18px 18px 17px;
+    text-decoration: none;
+    cursor: pointer;
+    background: #fff;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+
+}
+
+.modalEditButton span:first-child {
+    position: relative;
+    transition: color 600ms cubic-bezier(0.48, 0, 0.12, 1);
+    z-index: 10;
+}
+
+.modalEditButton span:last-child {
+    color: white;
+    display: block;
+    position: absolute;
+    bottom: 0;
+    transition: all 500ms cubic-bezier(0.48, 0, 0.12, 1);
+    z-index: 100;
+    opacity: 0;
+    top: 50%;
+    left: 50%;
+    transform: translateY(225%) translateX(-50%);
+    height: 14px;
+    line-height: 13px;
+}
+
+.modalEditButton:after {
+    content: "";
+    position: absolute;
+    bottom: -50%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    transform-origin: bottom center;
+    transition: transform 600ms cubic-bezier(0.48, 0, 0.12, 1);
+    transform: skewY(9.3deg) scaleY(0);
+    z-index: 50;
+}
+
+.modalEditButton:hover:after {
+    transform-origin: bottom center;
+    transform: skewY(9.3deg) scaleY(2);
+}
+
+.modalEditButton:hover span:last-child {
+    transform: translateX(-50%) translateY(-50%);
+    opacity: 1;
+    transition: all 900ms cubic-bezier(0.48, 0, 0.12, 1);
+}
+
+/* project add button start */
+
+.modalAddProject {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #18181a;
+    color: #18181a;
+    display: inline-block;
+    font-size: 15px;
+    line-height: 15px;
+    padding: 18px 18px 17px;
+    text-decoration: none;
+    cursor: pointer;
+    background: #fff;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.modalAddProject span:first-child {
+    position: relative;
+    transition: color 600ms cubic-bezier(0.48, 0, 0.12, 1);
+    z-index: 10;
+}
+
+.modalAddProject span:last-child {
+    color: white;
+    display: block;
+    position: absolute;
+    bottom: 0;
+    transition: all 500ms cubic-bezier(0.48, 0, 0.12, 1);
+    z-index: 100;
+    opacity: 0;
+    top: 50%;
+    left: 50%;
+    transform: translateY(225%) translateX(-50%);
+    height: 14px;
+    line-height: 13px;
+}
+
+.modalAddProject:after {
+    content: "";
+    position: absolute;
+    bottom: -50%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    transform-origin: bottom center;
+    transition: transform 600ms cubic-bezier(0.48, 0, 0.12, 1);
+    transform: skewY(9.3deg) scaleY(0);
+    z-index: 50;
+}
+
+.modalAddProject:hover:after {
+    transform-origin: bottom center;
+    transform: skewY(9.3deg) scaleY(2);
+}
+
+.modalAddProject:hover span:last-child {
+    transform: translateX(-50%) translateY(-50%);
+    opacity: 1;
+    transition: all 900ms cubic-bezier(0.48, 0, 0.12, 1);
+}
+
+/* end */
+
+/* close buttons start */
+#closeButton , #close{
+    /* Variables */
+    --button_radius: 0.75em;
+    --button_color: #e8e8e8;
+    --button_outline_color: #000000;
+    font-size: 13px;
+    font-weight: bold;
+    border: none;
+    /* border-radius: var(--button_radius); */
+    background: var(--button_outline_color);
+    margin-left: 230px;
+  }
+  
+  .buttonText {
+    display: block;
+    box-sizing: border-box;
+    border: 2px solid var(--button_outline_color);
+    /* border-radius: var(--button_radius); */
+    padding: 5px 10px;
+    background: var(--button_color);
+    color: var(--button_outline_color);
+    transform: translateY(-0.2em);
+    transition: transform 0.1s ease;
+  }
+  
+  #closeButton:hover .buttonText{
+    /* Pull the button upwards when hovered */
+    transform: translateY(-0.33em);
+  }
+  
+  #closeButton:active .buttonText{
+    /* Push the button downwards when pressed */
+    transform: translateY(0);
+  }
+
+  #close:hover{
+    /* Pull the button upwards when hovered */
+    transform: translateY(-0.33em);
+  }
+
+  #close:active{
+    /* Push the button downwards when pressed */
+    transform: translateY(0);
+  }
+  /* close button end */
+
+
+
+.hidden {
+    display: none;
+}
+
+.projectTitle {
+    color: white;
+}
+
+.projectsHeader {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    gap: 8px;
+    border-radius: 5px;
+}
+
+.projectsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+}
+
+#sidebarProjectDropdown {
+    display: none;
+    max-height: 75px;
+}
+
+.notHeader {
+    display: grid;
+    grid-template-columns: 250px 350px;
+
+}
+
+.calendar {
+    height: 15px;
+    width: 15px;
+}
+
+.eachCompletedDate {
+    margin-top: 15px;
+}
