@@ -17,18 +17,21 @@ class Project {
         this.taskList = taskList;
     }
 }
+let allTasks = [];
+let completedArray = [];
+let projectNames = [];
 
-let allTasks = [new Task("test 1", "testing1", "2024-02-12", "high", "none", "No Project", '1'),
-new Task("test 2", "testing 2", "2024-04-29", "medium", "none", "No Project", 2),
-new Task("test 3", "testing 3", "2024-04-30", "low", "none", "No Project", 3),
-new Task("test 6", "testing 6", "2024-05-08", "low", "none", "No Project", 4),
-new Task("test 7", "testing 7", "2024-05-02", "low", "none", "No Project", 5),
-new Task("test 8", "testing 8", "2024-05-06", "low", "none", "No Project", 6)
-];
+// let allTasks = [new Task("test 1", "testing1", "2024-02-12", "high", "none", "No Project", '1'),
+// new Task("test 2", "testing 2", "2024-04-29", "medium", "none", "No Project", 2),
+// new Task("test 3", "testing 3", "2024-04-30", "low", "none", "No Project", 3),
+// new Task("test 6", "testing 6", "2024-05-08", "low", "none", "No Project", 4),
+// new Task("test 7", "testing 7", "2024-05-02", "low", "none", "No Project", 5),
+// new Task("test 8", "testing 8", "2024-05-06", "low", "none", "No Project", 6)
+// ];
 let todayArray = [];
 let sevenDayArray = [];
-let completedArray = [new Task("test 4", "testing 4", "2024-02-28", "low", "Fri Mar 01 2024"),
-new Task("test 5", "testing 5", "2024-03-02", "medium", "Tue Mar 05 2024")];
+// let completedArray = [new Task("test 4", "testing 4", "2024-02-28", "low", "Fri Mar 01 2024"),
+// new Task("test 5", "testing 5", "2024-03-02", "medium", "Tue Mar 05 2024")];
 let projectsArray = [];
 let activeView = Object.freeze({
     all: 0,
@@ -37,7 +40,7 @@ let activeView = Object.freeze({
     completed: 3
 });
 
-renderTasks(allTasks);
+// renderTasks(allTasks);
 
 function sortArray(array) { //added
     array.sort(function (a, b) {
@@ -55,8 +58,8 @@ function sortArray(array) { //added
 function filterToday() { //added
     todayArray = [];
     for (i = 0; i < allTasks.length; i++) {
-        if (new Date(allTasks[i].dueDate) == new Date() || 
-        new Date(allTasks[i].dueDate) < new Date()) {
+        if (new Date(allTasks[i].dueDate) == new Date() ||
+            new Date(allTasks[i].dueDate) < new Date()) {
             todayArray.push(allTasks[i]);
             // if (new Date(allTasks[i].dueDate).toDateString() == new Date().toDateString()) {
             //     todayArray.push(allTasks[i]);
@@ -112,16 +115,46 @@ function addTask() { //added
     const newTask = new Task(title, description, date, priority, "none", project, id);
     allTasks.push(newTask);
     sortArray(allTasks);
-    renderTasks(allTasks);
-    changeTaskHeader("All Tasks");
+    // renderTasks(allTasks);
+    // changeTaskHeader("All Tasks");
+    //need to check the active view, then render tasks that have the same project name as the active view
+    // if(activeView==0){
+    //     renderTasks(allTasks)
+    // }
+    // else if(activeView==1){
+    //     renderTasks(todayArray)
+    // }
+    // else if(activeView==2){
+    //     renderTasks(sevenDayArray)
+    // }
+    // else if(activeView==3){
+    //     renderTasks(completedArray)
+    // }
+    whatToRender();
+    setStorage();
+}
 
+function whatToRender() {
+    sortArray(allTasks);
+    if (activeView == 0) {
+        renderTasks(allTasks);
+    }
+    else if (activeView == 1) {
+        renderTasks(todayArray);
+    }
+    else if (activeView == 2) {
+        renderTasks(sevenDayArray);
+    }
+    else if (activeView == 3) {
+        renderTasks(completedArray);
+    }
 }
 
 
 function addToProjectList() { //added
-    const projectName = document.querySelector('#projectName').value
-    const newProject = new Project(projectName);
-    projectsArray.push(newProject);
+    const projectName = document.querySelector('#projectName').value;
+    
+    projectNames.push(projectName);
     const dropdownOptions = document.querySelector('#project');
     const sidebarDropdown = document.querySelector('#sidebarProjectDropdown');
     while (sidebarDropdown.firstChild) {
@@ -137,8 +170,17 @@ function addToProjectList() { //added
     const selectProject = document.createElement('option');
     selectProject.innerHTML = `Select Project`;
     sidebarDropdown.appendChild(selectProject);
-    for (projectIndex in projectsArray) {
-        const projectTitle = projectsArray[projectIndex].projectName;
+    
+    setStorage();
+
+    populateProjectSelections();
+}
+
+function populateProjectSelections(){
+    const dropdownOptions = document.querySelector('#project');
+    const sidebarDropdown = document.querySelector('#sidebarProjectDropdown');
+    for (projectIndex in projectNames) {
+        const projectTitle = projectNames[projectIndex];
         const newOptionTasks = document.createElement('option');
         const newOptionSidebar = document.createElement('option');
         newOptionTasks.innerHTML = `${projectTitle}`;
@@ -189,7 +231,7 @@ document.querySelector('#sidebarProjectDropdown').addEventListener("change", () 
     }
 });
 
-const closeButton = document.querySelector('#close'); //added
+const closeButton = document.querySelector('#close');//added
 closeButton.addEventListener("click", () => {
     document.querySelector('#taskName').value = '';
     document.querySelector('#description').value = '';
@@ -212,7 +254,7 @@ function openSidebar() {//added
     document.querySelector('.sevenImage').style.display = 'inline'
     document.querySelector('.completedImage').style.display = 'inline'
     document.querySelector('#sidebarProjectDropdown').style.display = 'inline';
-    document.querySelector('.newTask').style.display= 'flex';
+    document.querySelector('.newTask').style.display = 'flex';
     document.querySelector('.taskDisplay').style.marginLeft = '0px';
 
 
@@ -246,14 +288,15 @@ sidebarButton.addEventListener('click', () => {
 
 function renderTasks(array) { //added
     document.querySelector('#tasks').innerHTML = '';
-    for (const taskIndex in array) {
+    for (const taskIndex in array) {        
         const task = array[taskIndex];
+        // if (task.project == "No Project"){
         const listItem = document.createElement('li');
         const taskDoneButton = document.createElement('button');
         taskDoneButton.classList.add(task.priority);
         taskDoneButton.setAttribute("id", "taskDoneButton")
         taskDoneButton.setAttribute("title", "Complete Task")
-        taskDoneButton.addEventListener("click", ()=>{
+        taskDoneButton.addEventListener("click", () => {
             addToCompleted(taskIndex);
             console.log("hello");
         });
@@ -267,7 +310,7 @@ function renderTasks(array) { //added
         class="calendar" id="calendar" />${task.dueDate}</p>
         <hr class ='taskDivider'>`
 
-        listItem.appendChild(taskInfoDiv);        
+        listItem.appendChild(taskInfoDiv);
 
         // listItem.innerHTML +=
         //     // `<button type='button' class='${task.priority}' id='taskDoneButton' onclick='addToCompleted(${taskIndex})'></button>
@@ -278,9 +321,9 @@ function renderTasks(array) { //added
         //  </div>`;
 
         //  const taskInfo = document.querySelector('.taskInfo');
-         taskInfoDiv.addEventListener("click", () => {
+        taskInfoDiv.addEventListener("click", () => {
             editTask(task);
-         });
+        });
 
         // const button = document.createElement('button');
         // button.textContent = "Edit Task";        
@@ -294,6 +337,7 @@ function renderTasks(array) { //added
     }
 
     //code goes here for other way of rendering
+// }
 }
 
 let buttonEvent;//added
@@ -303,12 +347,19 @@ function editTask(task) {
     document.querySelector('#editModal #taskDD').value = task.dueDate;
     document.querySelector('#editModal #priority').value = task.priority;
     document.querySelector('#editModal').classList.remove("hidden");
-    document.querySelector('.overlay').classList.remove("hidden"); 
+    document.querySelector('.overlay').classList.remove("hidden");
     buttonEvent = () => {
         updateTask(task.id);
+        sortArray(allTasks);
+    whatToRender();
     }
     document.querySelector('.modalEditButton').addEventListener('click', buttonEvent);
+    
+    
+    // let deleteTaskButton = document.querySelector('.deleteTaskImage');
+    // deleteTaskButton.addEventListener
 
+    
 }
 
 function updateTask(taskID) {//added
@@ -327,11 +378,15 @@ function updateTask(taskID) {//added
     }
     renderTasks(allTasks);
     document.querySelector('#editModal').classList.add("hidden");
-    document.querySelector('.overlay').classList.add("hidden"); 
+    document.querySelector('.overlay').classList.add("hidden");
     document.querySelector('.modalEditButton').removeEventListener('click', buttonEvent);
 
+}
+
+function deleteTask(){
 
 }
+
 function renderCompleted() { //added
     //put array in reverse order by completed date      
     completedArray.sort(function (a, b) {
@@ -396,7 +451,9 @@ function clear() { //added
 const allTasksButton = document.querySelector('.allTasksButton')//added
 allTasksButton.addEventListener('click', () => {
     clear();
-    renderTasks(allTasks);
+    // renderTasks(allTasks);
+    activeView = 0;
+    whatToRender();
     changeTaskHeader("All Tasks")
 });
 
@@ -404,7 +461,9 @@ const todayButton = document.querySelector('.todayButton');//added
 todayButton.addEventListener('click', () => {
     clear();
     filterToday();
-    renderTasks(todayArray);
+    activeView = 1;
+    whatToRender();
+    // renderTasks(todayArray);
     changeTaskHeader("Today");
 });
 
@@ -412,8 +471,10 @@ const sevenDayButton = document.querySelector('.sevenDayButton');//added
 sevenDayButton.addEventListener('click', () => {
     clear();
     filterSevenDays();
-    console.log(sevenDayArray);
-    renderTasks(sevenDayArray);
+    // console.log(sevenDayArray);
+    // renderTasks(sevenDayArray);
+    activeView = 2;
+    whatToRender();
     changeTaskHeader("Seven Day View")
 });
 
@@ -493,7 +554,9 @@ function addToCompleted(index) { //added
         task.completedDate = new Date().toDateString();
     });
     completedArray.push(removedTask[0]);
-    renderTasks(allTasks);
+    // renderTasks(allTasks);
+    whatToRender();
+    setStorage();
 
 }
 
@@ -501,3 +564,33 @@ function changeTaskHeader(view) { //added
     const taskHeader = document.querySelector('.currentView');
     taskHeader.innerHTML = `${view}`;
 }
+
+
+//localStorage stuff down here
+function setStorage() {
+    localStorage.setItem('allTasks', JSON.stringify(allTasks));
+    localStorage.setItem('todayArray', JSON.stringify(todayArray));
+    localStorage.setItem('sevenDayArray', JSON.stringify(sevenDayArray));
+    localStorage.setItem('completedArray', JSON.stringify(completedArray));
+    localStorage.setItem('projectNames', JSON.stringify(projectNames));
+}
+function updateVariablesFromStorage() {
+    allTasks = JSON.parse(localStorage.getItem('allTasks'));
+    todayArray = JSON.parse(localStorage.getItem('todayArray'));
+    sevenDayArray = JSON.parse(localStorage.getItem('sevenDayArray'));
+    completedArray = JSON.parse(localStorage.getItem('completedArray'))
+    projectNames = JSON.parse(localStorage.getItem('projectNames'));
+}
+function checkIfHereBefore() {
+    if (!localStorage.getItem('allTasks')) {
+        setStorage();
+    }
+    else {
+        updateVariablesFromStorage();
+    }
+}
+checkIfHereBefore();
+
+renderTasks(allTasks);
+activeView = 0;
+populateProjectSelections();

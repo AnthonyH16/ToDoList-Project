@@ -37,6 +37,11 @@ body {
     width: 25px;
 }
 
+.deleteTaskImage{
+    height: 25px;
+    width: 25px;
+
+}
 #viewSelector {
     display: flex;
     align-content: center;

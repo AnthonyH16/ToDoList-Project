@@ -93,7 +93,7 @@
                     </select>
 
                     <select name="project" id="project" class="dropdownSize">
-                        <option value="">No Project</option>
+                        <option >No Project</option>
                     </select>
                 </div>
 
@@ -115,7 +115,9 @@
                 <div class="modalHead">
                     <div class="modalTopText">Edit Task</div>
                     <button onclick="closeModal('editModal')" class="closeEditModal" id="closeButton"><span class="buttonText">x</span></button>
-                    
+                    <input onclick="deleteTask('somethingneedstogoinhere')" type="image"
+                            src="/home/bofadeeze/repos/ToDoList-Project/src/garbage.png" name="deleteTask"
+                            class="deleteTaskImage" id="deleteTaskImage" />
                 </div>
                 <input type="text" id="taskTitle" placeholder="Title">
                 <input type="text" id="taskDesc" placeholder="Description">
