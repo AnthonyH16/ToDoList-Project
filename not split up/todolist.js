@@ -20,6 +20,7 @@ class Project {
 let allTasks = [];
 let completedArray = [];
 let projectNames = [];
+let deletedTasks = [];
 
 // let allTasks = [new Task("test 1", "testing1", "2024-02-12", "high", "none", "No Project", '1'),
 // new Task("test 2", "testing 2", "2024-04-29", "medium", "none", "No Project", 2),
@@ -103,7 +104,6 @@ newTask.addEventListener('click', () => {
     newTaskDialog.showModal();
 });
 
-
 function addTask() { //added
     const title = document.querySelector('#taskName').value;
     const description = document.querySelector('#description').value;
@@ -111,7 +111,9 @@ function addTask() { //added
     const priority = document.querySelector('#priority').value;
     const select = document.querySelector('#project');
     const project = select.options[select.selectedIndex].text;
-    const id = allTasks[allTasks.length - 1].id + 1;
+    // const id = parseInt(allTasks[allTasks.length - 1].id) + 1;
+    const id = parseInt(allTasks.length + completedArray.length +
+        deletedTasks.length) + 1;
     const newTask = new Task(title, description, date, priority, "none", project, id);
     allTasks.push(newTask);
     sortArray(allTasks);
@@ -140,9 +142,11 @@ function whatToRender() {
         renderTasks(allTasks);
     }
     else if (activeView == 1) {
+        filterToday();
         renderTasks(todayArray);
     }
     else if (activeView == 2) {
+        filterSevenDays();
         renderTasks(sevenDayArray);
     }
     else if (activeView == 3) {
@@ -153,7 +157,7 @@ function whatToRender() {
 
 function addToProjectList() { //added
     const projectName = document.querySelector('#projectName').value;
-    
+
     projectNames.push(projectName);
     const dropdownOptions = document.querySelector('#project');
     const sidebarDropdown = document.querySelector('#sidebarProjectDropdown');
@@ -170,13 +174,12 @@ function addToProjectList() { //added
     const selectProject = document.createElement('option');
     selectProject.innerHTML = `Select Project`;
     sidebarDropdown.appendChild(selectProject);
-    
-    setStorage();
 
+    setStorage();
     populateProjectSelections();
 }
 
-function populateProjectSelections(){
+function populateProjectSelections() {
     const dropdownOptions = document.querySelector('#project');
     const sidebarDropdown = document.querySelector('#sidebarProjectDropdown');
     for (projectIndex in projectNames) {
@@ -256,7 +259,7 @@ function openSidebar() {//added
     document.querySelector('#sidebarProjectDropdown').style.display = 'inline';
     document.querySelector('.newTask').style.display = 'flex';
     document.querySelector('.taskDisplay').style.marginLeft = '0px';
-
+    document.querySelector('.recycleBinImage').style.display = 'inline'
 
 
 }
@@ -273,6 +276,7 @@ function closeSidebar() { //added
     document.querySelector('#sidebarProjectDropdown').style.display = 'none';
     document.querySelector('.newTask').style.display = 'none';
     document.querySelector('.taskDisplay').style.marginLeft = '-250px';
+    document.querySelector('.recycleBinImage').style.display = 'none'
 }
 
 const sidebarButton = document.querySelector('.sidebarButton'); //added
@@ -288,7 +292,7 @@ sidebarButton.addEventListener('click', () => {
 
 function renderTasks(array) { //added
     document.querySelector('#tasks').innerHTML = '';
-    for (const taskIndex in array) {        
+    for (const taskIndex in array) {
         const task = array[taskIndex];
         // if (task.project == "No Project"){
         const listItem = document.createElement('li');
@@ -298,6 +302,7 @@ function renderTasks(array) { //added
         taskDoneButton.setAttribute("title", "Complete Task")
         taskDoneButton.addEventListener("click", () => {
             addToCompleted(taskIndex);
+            whatToRender();
             console.log("hello");
         });
         listItem.appendChild(taskDoneButton);
@@ -337,10 +342,11 @@ function renderTasks(array) { //added
     }
 
     //code goes here for other way of rendering
-// }
+    // }
 }
 
 let buttonEvent;//added
+let deleteTaskButtonEvent;
 function editTask(task) {
     document.querySelector('#editModal #taskTitle').value = task.title;
     document.querySelector('#editModal #taskDesc').value = task.description;
@@ -351,15 +357,17 @@ function editTask(task) {
     buttonEvent = () => {
         updateTask(task.id);
         sortArray(allTasks);
-    whatToRender();
+        whatToRender();
     }
     document.querySelector('.modalEditButton').addEventListener('click', buttonEvent);
-    
-    
-    // let deleteTaskButton = document.querySelector('.deleteTaskImage');
-    // deleteTaskButton.addEventListener
 
-    
+    deleteTaskButtonEvent = () => {
+        deleteTask(task.id);
+        setStorage();
+    }
+    let deleteTaskButton = document.querySelector('.deleteTaskImage');
+    deleteTaskButton.addEventListener('click', deleteTaskButtonEvent);
+
 }
 
 function updateTask(taskID) {//added
@@ -380,11 +388,19 @@ function updateTask(taskID) {//added
     document.querySelector('#editModal').classList.add("hidden");
     document.querySelector('.overlay').classList.add("hidden");
     document.querySelector('.modalEditButton').removeEventListener('click', buttonEvent);
-
+    setStorage();
 }
 
-function deleteTask(){
-
+function deleteTask(taskID) {
+    for (const index in allTasks) {
+        let taskToBeDeleted = allTasks[index];
+        if (taskToBeDeleted.id == taskID) {
+            allTasks.splice(index, 1);
+            deletedTasks.push(taskToBeDeleted);
+        }
+    }
+    whatToRender();
+    closeModal('editModal');
 }
 
 function renderCompleted() { //added
@@ -416,9 +432,7 @@ function renderCompleted() { //added
         let dateHeader = document.createElement('div');
         dateHeader.classList.add('dateHeader');
         dateHeader.innerHTML = `${eachDateArray[0].completedDate}`;
-        let hr = document.createElement('hr');
-        hr.classList.add('taskDivider');
-        eachCompletedDate.appendChild(hr)
+
         eachCompletedDate.appendChild(dateHeader);
         for (i = 0; i < eachDateArray.length; i++) {
             eachCompletedDate.innerHTML += `<div class = "completedTask"> 
@@ -427,7 +441,67 @@ function renderCompleted() { //added
             <p class='prefix'>You completed task:</p>
             <p class= 'suffix'>${eachDateArray[i].title}</div>`
         }
+        let hr = document.createElement('hr');
+        hr.classList.add('taskDivider');
+        eachCompletedDate.appendChild(hr)
     }
+}
+
+// function renderRecycleBin(){
+//     for (i=0; i<deletedTasks.length ; i++){
+//         let tasks =document.querySelector('#tasks');
+//         let delTask = document.createElement('div');
+//         delTask.classList.add('deletedTask');
+//         delTask.innerHTML = ` <p class='prefix' id='delTitle'>${deletedTasks[i].title}</p>
+//         <p class='suffix' id='wasDeleted'>was deleted</p>
+//         <input title='Undo Delete' type="image" src="/home/bofadeeze/repos/ToDoList-Project/src/undodelete.png" name="undoImage"
+//                 class="undoImage" id="undoImage" />`
+//         tasks.appendChild(delTask);
+//         let hr = document.createElement('hr');
+//         hr.classList.add('taskDivider');
+//         tasks.appendChild(hr)
+
+//         console.log("poop popsicle sticks");
+
+//         (function(index){
+//             let undo = document.querySelector(`#undoImage`)
+//         undo.addEventListener('click', () =>{
+//             restoreTask(index);
+//             console.log(index);
+//         });
+//     })(i);
+//     }
+// }
+
+function renderRecycleBin() {
+    for (let i = 0; i < deletedTasks.length; i++) {
+        let tasks = document.querySelector('#tasks');
+        let delTask = document.createElement('div');
+        delTask.classList.add('deletedTask');
+        delTask.innerHTML = ` <p class='prefix' id='delTitle'>${deletedTasks[i].title}</p>
+        <p class='suffix' id='wasDeleted'>was deleted</p>
+        <input title='Undo Delete' type="image" src="/home/bofadeeze/repos/ToDoList-Project/src/undodelete.png" name="undoImage"
+                class="undoImage" id="undoImage${i}" />`
+        tasks.appendChild(delTask);
+        let hr = document.createElement('hr');
+        hr.classList.add('taskDivider');
+        tasks.appendChild(hr);
+
+        let undo = document.querySelector(`#undoImage${i}`)
+        undo.addEventListener('click', () => {
+            restoreTask(i);
+            console.log(i);
+        });
+    }
+}
+
+function restoreTask(i) {
+    let taskToBeRestored = deletedTasks[i];
+    console.log(taskToBeRestored);
+    allTasks.push(taskToBeRestored);
+    deletedTasks.splice(i, 1);
+    clear();
+    renderRecycleBin();
 }
 
 document.querySelector('#newTaskForm').addEventListener('submit', function (event) {//added
@@ -460,7 +534,7 @@ allTasksButton.addEventListener('click', () => {
 const todayButton = document.querySelector('.todayButton');//added
 todayButton.addEventListener('click', () => {
     clear();
-    filterToday();
+    // filterToday();
     activeView = 1;
     whatToRender();
     // renderTasks(todayArray);
@@ -470,12 +544,12 @@ todayButton.addEventListener('click', () => {
 const sevenDayButton = document.querySelector('.sevenDayButton');//added
 sevenDayButton.addEventListener('click', () => {
     clear();
-    filterSevenDays();
+    // filterSevenDays();
     // console.log(sevenDayArray);
     // renderTasks(sevenDayArray);
     activeView = 2;
     whatToRender();
-    changeTaskHeader("Seven Day View")
+    changeTaskHeader("Seven Day View");
 });
 
 const completedButton = document.querySelector('.completedButton');//added
@@ -484,8 +558,15 @@ completedButton.addEventListener('click', () => {
     //sortArray(completedArray);
     // renderTasks(completedArray);
     renderCompleted();
-    changeTaskHeader("Completed Tasks")
+    changeTaskHeader("Completed Tasks");
 });
+
+const recycleBinButton = document.querySelector('.recycleBinButton');
+recycleBinButton.addEventListener('click', () => {
+    clear();
+    renderRecycleBin();
+    changeTaskHeader("Recycle Bin");
+})
 
 // const projectsButton = document.querySelector('.projectsButton');//added
 // projectsButton.addEventListener('click', () => {
@@ -573,13 +654,15 @@ function setStorage() {
     localStorage.setItem('sevenDayArray', JSON.stringify(sevenDayArray));
     localStorage.setItem('completedArray', JSON.stringify(completedArray));
     localStorage.setItem('projectNames', JSON.stringify(projectNames));
+    localStorage.setItem('deletedTasks', JSON.stringify(deletedTasks));
 }
 function updateVariablesFromStorage() {
     allTasks = JSON.parse(localStorage.getItem('allTasks'));
     todayArray = JSON.parse(localStorage.getItem('todayArray'));
     sevenDayArray = JSON.parse(localStorage.getItem('sevenDayArray'));
-    completedArray = JSON.parse(localStorage.getItem('completedArray'))
+    completedArray = JSON.parse(localStorage.getItem('completedArray'));
     projectNames = JSON.parse(localStorage.getItem('projectNames'));
+    deletedTasks = JSON.parse(localStorage.getItem('deletedTasks'));
 }
 function checkIfHereBefore() {
     if (!localStorage.getItem('allTasks')) {

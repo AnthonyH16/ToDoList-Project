@@ -32,7 +32,8 @@ body {
     margin-right: 10px;
 }
 
-.doneImage {
+.doneImage,
+.undoImage {
     height: 25px;
     width: 25px;
 }
@@ -198,7 +199,8 @@ p {
 .todayButton:hover,
 .sevenDayButton:hover,
 .completedButton:hover,
-.projectsHeader:hover {
+.projectsHeader:hover,
+.recycleBinButton:hover {
     background-color: rgb(131, 130, 130);
     cursor: pointer;
     transition: 800ms;
@@ -639,4 +641,17 @@ p {
 
 .eachCompletedDate {
     margin-top: 15px;
+}
+
+.deletedTask{
+    display: flex;
+    align-items: center;
+}
+
+#delTitle{
+    font-weight: bold;
+}
+
+#wasDeleted{
+    margin-right: 8px;
 }
