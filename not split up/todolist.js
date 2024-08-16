@@ -22,17 +22,8 @@ let completedArray = [];
 let projectNames = [];
 let deletedTasks = [];
 
-// let allTasks = [new Task("test 1", "testing1", "2024-02-12", "high", "none", "No Project", '1'),
-// new Task("test 2", "testing 2", "2024-04-29", "medium", "none", "No Project", 2),
-// new Task("test 3", "testing 3", "2024-04-30", "low", "none", "No Project", 3),
-// new Task("test 6", "testing 6", "2024-05-08", "low", "none", "No Project", 4),
-// new Task("test 7", "testing 7", "2024-05-02", "low", "none", "No Project", 5),
-// new Task("test 8", "testing 8", "2024-05-06", "low", "none", "No Project", 6)
-// ];
 let todayArray = [];
 let sevenDayArray = [];
-// let completedArray = [new Task("test 4", "testing 4", "2024-02-28", "low", "Fri Mar 01 2024"),
-// new Task("test 5", "testing 5", "2024-03-02", "medium", "Tue Mar 05 2024")];
 let projectsArray = [];
 let activeView = Object.freeze({
     all: 0,
@@ -41,9 +32,7 @@ let activeView = Object.freeze({
     completed: 3
 });
 
-// renderTasks(allTasks);
-
-function sortArray(array) { //added
+function sortArray(array) { 
     array.sort(function (a, b) {
         let d1 = new Date(a.dueDate);
         let d2 = new Date(b.dueDate);
@@ -56,36 +45,20 @@ function sortArray(array) { //added
     });
 }
 
-function filterToday() { //added
+function filterToday() { 
     todayArray = [];
     for (i = 0; i < allTasks.length; i++) {
         if (new Date(allTasks[i].dueDate) == new Date() ||
             new Date(allTasks[i].dueDate) < new Date()) {
-            todayArray.push(allTasks[i]);
-            // if (new Date(allTasks[i].dueDate).toDateString() == new Date().toDateString()) {
-            //     todayArray.push(allTasks[i]);
-
+            todayArray.push(allTasks[i]);           
         }
     }
 }
 
-function filterSevenDays() { //added
-    sevenDayArray = [];
-    // allTasks.filter(function (task) {
-    //     let dateToday = new Date();
-    //     let weekFromToday = new Date(dateToday.setDate(dateToday.getDate() + 7));
-    //     dateToday = dateToday.toDateString();
-    //     weekFromToday = weekFromToday.toDateString();
-    //     if (new Date(task.dueDate).toDateString() == dateToday ||
-    //         new Date(task.dueDate).toDateString() <= weekFromToday) {
-    //         sevenDayArray.push(task);
-    //     }
-    // });
-    //----------
+function filterSevenDays() { 
+    sevenDayArray = []; 
     let dateToday = new Date();
-    let weekFromToday = new Date(dateToday.setDate(dateToday.getDate() + 7));
-    // dateToday = dateToday.toDateString();
-    // weekFromToday = weekFromToday.toDateString();
+    let weekFromToday = new Date(dateToday.setDate(dateToday.getDate() + 7));   
     for (index in allTasks) {
         const task = allTasks[index];
         console.log(task.dueDate);
@@ -98,40 +71,24 @@ function filterSevenDays() { //added
     }
 }
 
-const newTaskDialog = document.querySelector('.newTaskDialog');//added
+const newTaskDialog = document.querySelector('.newTaskDialog');
 const newTask = document.querySelector('.newTask');
 newTask.addEventListener('click', () => {
     newTaskDialog.showModal();
 });
 
-function addTask() { //added
+function addTask() { 
     const title = document.querySelector('#taskName').value;
     const description = document.querySelector('#description').value;
     const date = document.querySelector('#date').value; //added space here
     const priority = document.querySelector('#priority').value;
     const select = document.querySelector('#project');
-    const project = select.options[select.selectedIndex].text;
-    // const id = parseInt(allTasks[allTasks.length - 1].id) + 1;
+    const project = select.options[select.selectedIndex].text;    
     const id = parseInt(allTasks.length + completedArray.length +
         deletedTasks.length) + 1;
     const newTask = new Task(title, description, date, priority, "none", project, id);
     allTasks.push(newTask);
-    sortArray(allTasks);
-    // renderTasks(allTasks);
-    // changeTaskHeader("All Tasks");
-    //need to check the active view, then render tasks that have the same project name as the active view
-    // if(activeView==0){
-    //     renderTasks(allTasks)
-    // }
-    // else if(activeView==1){
-    //     renderTasks(todayArray)
-    // }
-    // else if(activeView==2){
-    //     renderTasks(sevenDayArray)
-    // }
-    // else if(activeView==3){
-    //     renderTasks(completedArray)
-    // }
+    sortArray(allTasks);    
     whatToRender();
     setStorage();
 }
@@ -155,7 +112,7 @@ function whatToRender() {
 }
 
 
-function addToProjectList() { //added
+function addToProjectList() { 
     const projectName = document.querySelector('#projectName').value;
 
     projectNames.push(projectName);
@@ -167,7 +124,6 @@ function addToProjectList() { //added
     while (dropdownOptions.firstChild) {
         dropdownOptions.firstChild.remove();
     }
-
     const noProject = document.createElement('option');
     noProject.innerHTML = `No Project`
     dropdownOptions.appendChild(noProject);
@@ -182,24 +138,28 @@ function addToProjectList() { //added
 function populateProjectSelections() {
     const dropdownOptions = document.querySelector('#project');
     const sidebarDropdown = document.querySelector('#sidebarProjectDropdown');
+    const editDropdown = document.querySelector('#editProject');
     for (projectIndex in projectNames) {
         const projectTitle = projectNames[projectIndex];
         const newOptionTasks = document.createElement('option');
         const newOptionSidebar = document.createElement('option');
+        const optionsEdit = document.createElement('option');
         newOptionTasks.innerHTML = `${projectTitle}`;
         newOptionSidebar.innerHTML = `${projectTitle}`;
+        optionsEdit.innerHTML = `${projectTitle}`;
         dropdownOptions.appendChild(newOptionTasks);
         sidebarDropdown.appendChild(newOptionSidebar);
+        editDropdown.appendChild(optionsEdit);
     }
 }
 
-const modalAddProject = document.querySelector('.modalAddProject');//added
+const modalAddProject = document.querySelector('.modalAddProject');
 modalAddProject.addEventListener('click', () => {
     addToProjectList();
     closeModal('projectModal');
 });
 
-function renderProject() { //added
+function renderProject() { 
     const projectArray = [];
     const select = document.querySelector('#sidebarProjectDropdown');
     const project = select.options[select.selectedIndex].text;
@@ -207,15 +167,6 @@ function renderProject() { //added
         const task = allTasks[index]
         if (task.project == project) {
             projectArray.push(task);
-
-            //         document.querySelector('#tasks').innerHTML = '';            
-            //         document.querySelector('#tasks').innerHTML +=
-            //             `<li><button type='button' class='${task.priority}' id='taskDoneButton' onclick='addToCompleted(${taskIndex})'></button>
-            //    <div class = 'taskInfo'> <p class = 'taskTitle'>${task.title}</p>
-            //     <p class = 'taskDesc'>${task.description}</p>
-            //     <p class = 'taskDD'>${task.dueDate}</p>
-            //     </div>
-            //     </li>`;
         }
     }
     renderTasks(projectArray);
@@ -234,7 +185,7 @@ document.querySelector('#sidebarProjectDropdown').addEventListener("change", () 
     }
 });
 
-const closeButton = document.querySelector('#close');//added
+const closeButton = document.querySelector('#close');
 closeButton.addEventListener("click", () => {
     document.querySelector('#taskName').value = '';
     document.querySelector('#description').value = '';
@@ -247,7 +198,7 @@ closeButton.addEventListener("click", () => {
 
 let isSidebarOpen = false;
 
-function openSidebar() {//added
+function openSidebar() {
     // document.querySelector('.sidebar').style.display = 'grid';    
     document.querySelector('.sidebar').style.width = '250px';
     isSidebarOpen = true;
@@ -264,7 +215,7 @@ function openSidebar() {//added
 
 }
 
-function closeSidebar() { //added
+function closeSidebar() {
     // document.querySelector('.sidebar').style.display = 'none';
     document.querySelector('.sidebar').style.width = '0px';
     isSidebarOpen = false;
@@ -290,7 +241,7 @@ sidebarButton.addEventListener('click', () => {
     }
 });
 
-function renderTasks(array) { //added
+function renderTasks(array) {
     document.querySelector('#tasks').innerHTML = '';
     for (const taskIndex in array) {
         const task = array[taskIndex];
@@ -315,29 +266,7 @@ function renderTasks(array) { //added
         class="calendar" id="calendar" />${task.dueDate}</p>
         <hr class ='taskDivider'>`
 
-        listItem.appendChild(taskInfoDiv);
-
-        // listItem.innerHTML +=
-        //     // `<button type='button' class='${task.priority}' id='taskDoneButton' onclick='addToCompleted(${taskIndex})'></button>
-        // `<div class = 'taskInfo'> <p class = 'taskTitle'>${task.title}</p>
-        //  <p class = 'taskDesc'>${task.description}</p>
-        //  <p class = 'taskDD'><input type="image" src="/home/bofadeeze/repos/ToDoList-Project/src/calendar.png" name="calendar"
-        //  class="calendar" id="calendar" />${task.dueDate}</p>
-        //  </div>`;
-
-        //  const taskInfo = document.querySelector('.taskInfo');
-        taskInfoDiv.addEventListener("click", () => {
-            editTask(task);
-        });
-
-        // const button = document.createElement('button');
-        // button.textContent = "Edit Task";        
-        // button.addEventListener("click", () => {
-        //     editTask(task);
-        // });
-        // listItem.appendChild(button);
-
-
+        listItem.appendChild(taskInfoDiv);       
         document.querySelector('#tasks').appendChild(listItem);
     }
 
@@ -345,13 +274,14 @@ function renderTasks(array) { //added
     // }
 }
 
-let buttonEvent;//added
+let buttonEvent;
 let deleteTaskButtonEvent;
 function editTask(task) {
     document.querySelector('#editModal #taskTitle').value = task.title;
     document.querySelector('#editModal #taskDesc').value = task.description;
     document.querySelector('#editModal #taskDD').value = task.dueDate;
     document.querySelector('#editModal #priority').value = task.priority;
+    document.querySelector('#editModal #editProject').value = task.project;
     document.querySelector('#editModal').classList.remove("hidden");
     document.querySelector('.overlay').classList.remove("hidden");
     buttonEvent = () => {
@@ -370,21 +300,24 @@ function editTask(task) {
 
 }
 
-function updateTask(taskID) {//added
+function updateTask(taskID) {
     const title = document.querySelector('#editModal #taskTitle').value;
     const description = document.querySelector('#editModal #taskDesc').value;
     const dueDate = document.querySelector('#editModal #taskDD').value;
     const priority = document.querySelector('#editModal #priority').value;
+    const project = document.querySelector('#editModal #editProject').value;
     for (const task of allTasks) {
         if (task.id == taskID) {
             task.title = title;
             task.description = description;
             task.dueDate = dueDate;
             task.priority = priority;
+            task.project = project;
             break
         }
     }
     renderTasks(allTasks);
+    changeTaskHeader("All Tasks");
     document.querySelector('#editModal').classList.add("hidden");
     document.querySelector('.overlay').classList.add("hidden");
     document.querySelector('.modalEditButton').removeEventListener('click', buttonEvent);
@@ -403,7 +336,7 @@ function deleteTask(taskID) {
     closeModal('editModal');
 }
 
-function renderCompleted() { //added
+function renderCompleted() {
     //put array in reverse order by completed date      
     completedArray.sort(function (a, b) {
         let d1 = new Date(a.completedDate);
@@ -416,8 +349,6 @@ function renderCompleted() { //added
         }
     });
 
-    // sortArray(completedArray);
-    // completedArray.reverse();
     const groupByCompletedDate = Object.groupBy(completedArray, date => {
         return date.completedDate;
     });
@@ -447,31 +378,6 @@ function renderCompleted() { //added
     }
 }
 
-// function renderRecycleBin(){
-//     for (i=0; i<deletedTasks.length ; i++){
-//         let tasks =document.querySelector('#tasks');
-//         let delTask = document.createElement('div');
-//         delTask.classList.add('deletedTask');
-//         delTask.innerHTML = ` <p class='prefix' id='delTitle'>${deletedTasks[i].title}</p>
-//         <p class='suffix' id='wasDeleted'>was deleted</p>
-//         <input title='Undo Delete' type="image" src="/home/bofadeeze/repos/ToDoList-Project/src/undodelete.png" name="undoImage"
-//                 class="undoImage" id="undoImage" />`
-//         tasks.appendChild(delTask);
-//         let hr = document.createElement('hr');
-//         hr.classList.add('taskDivider');
-//         tasks.appendChild(hr)
-
-//         console.log("poop popsicle sticks");
-
-//         (function(index){
-//             let undo = document.querySelector(`#undoImage`)
-//         undo.addEventListener('click', () =>{
-//             restoreTask(index);
-//             console.log(index);
-//         });
-//     })(i);
-//     }
-// }
 
 function renderRecycleBin() {
     for (let i = 0; i < deletedTasks.length; i++) {
@@ -502,6 +408,7 @@ function restoreTask(i) {
     deletedTasks.splice(i, 1);
     clear();
     renderRecycleBin();
+    setStorage();
 }
 
 document.querySelector('#newTaskForm').addEventListener('submit', function (event) {//added
@@ -510,53 +417,44 @@ document.querySelector('#newTaskForm').addEventListener('submit', function (even
     document.querySelector('#taskName').value = '';
     document.querySelector('#description').value = '';
     document.querySelector('#date').value = '';
-    // document.querySelector('#priority').value = '';
     document.querySelector('#project').value = 'No Project';
     newTaskDialog.close();
 });
 
-function clear() { //added
+function clear() {
     const parent = document.querySelector('#tasks');
     while (parent.firstChild) {
         parent.firstChild.remove();
     }
 }
 
-const allTasksButton = document.querySelector('.allTasksButton')//added
+const allTasksButton = document.querySelector('.allTasksButton')
 allTasksButton.addEventListener('click', () => {
     clear();
-    // renderTasks(allTasks);
     activeView = 0;
     whatToRender();
     changeTaskHeader("All Tasks")
 });
 
-const todayButton = document.querySelector('.todayButton');//added
+const todayButton = document.querySelector('.todayButton');
 todayButton.addEventListener('click', () => {
-    clear();
-    // filterToday();
+    clear();    
     activeView = 1;
     whatToRender();
-    // renderTasks(todayArray);
     changeTaskHeader("Today");
 });
 
-const sevenDayButton = document.querySelector('.sevenDayButton');//added
+const sevenDayButton = document.querySelector('.sevenDayButton');
 sevenDayButton.addEventListener('click', () => {
     clear();
-    // filterSevenDays();
-    // console.log(sevenDayArray);
-    // renderTasks(sevenDayArray);
     activeView = 2;
     whatToRender();
     changeTaskHeader("Seven Day View");
 });
 
-const completedButton = document.querySelector('.completedButton');//added
+const completedButton = document.querySelector('.completedButton');
 completedButton.addEventListener('click', () => {
     clear();
-    //sortArray(completedArray);
-    // renderTasks(completedArray);
     renderCompleted();
     changeTaskHeader("Completed Tasks");
 });
@@ -568,25 +466,7 @@ recycleBinButton.addEventListener('click', () => {
     changeTaskHeader("Recycle Bin");
 })
 
-// const projectsButton = document.querySelector('.projectsButton');//added
-// projectsButton.addEventListener('click', () => {
-//     modal.classList.remove("hidden");
-//     overlay.classList.remove("hidden")
-
-// });
-
-
-// const modal = document.querySelector('.projectModal');
-// const overlay = document.querySelector(".overlay");
-// const addProject = document.querySelector('.addProject');
-// addProject.addEventListener('click', () => {
-//     modal.classList.remove("hidden");
-//     overlay.classList.remove("hidden");
-
-// });
-
-
-function openModal(projectModal) {//added
+function openModal(projectModal) {
     document.querySelector('#projectName').value = '';
     const modal = document.querySelector(`#${projectModal}`);
     const overlay = document.querySelector(".overlay");
@@ -595,7 +475,7 @@ function openModal(projectModal) {//added
 
 }
 
-function closeModal(projectModal) {//added
+function closeModal(projectModal) {
     const modal = document.querySelector(`#${projectModal}`);
     const overlay = document.querySelector(".overlay");
     modal.classList.add('hidden');
@@ -603,45 +483,18 @@ function closeModal(projectModal) {//added
     document.querySelector('.modalEditButton').removeEventListener('click', buttonEvent);
 };
 
-// const closeProjectButton = document.querySelector('.closeProjectForm');
-// closeProjectButton.addEventListener('click', () => {
-//     closeModal();
-// });
-
-// document.addEventListener("keydown", function (e) {
-//     if (e.key === "Escape" && !modal.classList.contains("hidden")) {
-//         closeModal();
-//     }
-// });
-
-
-
-
-
-// function addToCompleted(index){
-//    let removedTask = allTasks.splice(index,1);  
-//    removedTask.forEach(task => {
-//     task['completedDate'] = new Date().toDateString();
-//    });
-//     completedArray.push(removedTask[0]);
-//      renderTasks(allTasks);
-
-// } this code above works, trying something else below
-
-
-function addToCompleted(index) { //added
+function addToCompleted(index) { 
     let removedTask = allTasks.splice(index, 1);
     removedTask.forEach(task => {
         task.completedDate = new Date().toDateString();
     });
     completedArray.push(removedTask[0]);
-    // renderTasks(allTasks);
     whatToRender();
     setStorage();
 
 }
 
-function changeTaskHeader(view) { //added
+function changeTaskHeader(view) { 
     const taskHeader = document.querySelector('.currentView');
     taskHeader.innerHTML = `${view}`;
 }
